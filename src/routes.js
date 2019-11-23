@@ -1,16 +1,30 @@
-import {createAppContainer} from 'react-navigation';
+import {createAppContainer, createSwitchNavigator} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 
-import SignIn from './pages/signIn';
-import SignUp from './pages/signUp';
-import Main from './pages/main';
+import SignIn from './pages/SignIn';
+import SignUp from './pages/SignUp';
 
-const Routes = createAppContainer(
-  createStackNavigator({
-    signin: {
-      screen: SignIn,
-    },
-  }),
-);
+import Dashboard from './pages/Dashboard';
 
-export default Routes;
+export default (signedIn = false) =>
+  createAppContainer(
+    createSwitchNavigator(
+      {
+        Sign: createSwitchNavigator({
+          SignIn,
+          SignUp,
+        }),
+        App: createStackNavigator(
+          {
+            Dashboard,
+          },
+          {
+            headerLayoutPreset: 'center',
+          },
+        ),
+      },
+      {
+        initialRouteName: signedIn ? 'App' : 'Sign',
+      },
+    ),
+  );
